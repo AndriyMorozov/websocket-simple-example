@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<h1>Socket Server Example</h1>
+<form method="post" id="form">
+    <div><label for="message">Message:</label></div>
+    <div>
+        <input id="message" type="text" name="message"/>
+        <button type="submit">Send</button>
+    </div>
+</form>
+<div>
+    Chat:
+</div>
+<div id="chat">
+
+</div>
+<script>
+    let socket = io();
+    let chatElem = document.querySelector('#chat');
+    let form = document.querySelector('#form');
+    form.addEventListener('submit', function (event) {
+        let messageElem = document.querySelector('#message');
+        let messageText = messageElem.value;
+        messageElem.value = '';
+        socket.emit('chat message', messageText);
+        event.preventDefault();
+    });
+    socket.on('chat message', messageText => {
+        let divElem = document.createElement('div');
+        divElem.innerHTML = messageText;
+        chatElem.appendChild(divElem);
+    });
+</script>
+</body>
+</html>
